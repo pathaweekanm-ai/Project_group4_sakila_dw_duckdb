@@ -1,0 +1,7 @@
+sakila_dw_duckdb:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: sakila_dw.duckdb
+      threads: 4
