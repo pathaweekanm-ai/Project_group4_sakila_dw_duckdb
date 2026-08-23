@@ -6,8 +6,5 @@
 #}
 {% macro days_between(end_date_column, start_date_column) %}
     date_diff('day', {{ start_date_column }}, {{ end_date_column }})
-<<<<<<< HEAD
 {% endmacro %}
-=======
 {% endmacro %}
->>>>>>> b4237fb61d2c2ab91a198bf37415f653bfc64a40

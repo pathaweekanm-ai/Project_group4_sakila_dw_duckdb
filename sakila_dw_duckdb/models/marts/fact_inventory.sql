@@ -1,6 +1,5 @@
 -- Fact_Inventory — grain: 1 row = 1 film x 1 store (different grain from Fact_Rental,
 -- which is why this is a separate fact table). Answers BQ09 (utilization) / BQ10 (stock shortage).
-
 with inv_counts as (
     select
         df.film_key,

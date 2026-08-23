@@ -1,9 +1,3 @@
--- Fact_Rental — grain: 1 row = 1 rental transaction (rental.rental_id).
--- Confirmed against the loaded data: every rental has exactly 0 or 1 payment
--- (no fan-out), so the left join to payment is safe without an aggregation step.
--- date_key = -1 (the Dim_Date placeholder row) stands in for nullable return/payment dates
--- so no foreign key here is ever NULL.
-
 select
     r.rental_id,
     r.inventory_id,
