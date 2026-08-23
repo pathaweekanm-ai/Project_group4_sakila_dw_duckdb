@@ -1,0 +1,6 @@
+sakila_dw_duckdb:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: dev.duckdb

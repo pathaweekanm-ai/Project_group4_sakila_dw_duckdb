@@ -1,0 +1,5 @@
+{
+  "terminal.integrated.env.linux": {
+    "DBT_PROFILES_DIR": "${workspaceFolder}/sakila_dw_duckdb"
+  }
+}
