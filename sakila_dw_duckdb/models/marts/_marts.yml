@@ -1,0 +1,88 @@
+version: 2
+
+models:
+  - name: dim_date
+    description: Role-playing date dimension. date_key = -1 is the placeholder row for nullable dates.
+    columns:
+      - name: date_key
+        tests: [unique, not_null]
+
+  - name: dim_customer
+    columns:
+      - name: customer_key
+        tests: [unique, not_null]
+      - name: customer_id
+        tests: [unique, not_null]
+
+  - name: dim_film
+    columns:
+      - name: film_key
+        tests: [unique, not_null]
+      - name: film_id
+        tests: [unique, not_null]
+
+  - name: dim_store
+    columns:
+      - name: store_key
+        tests: [unique, not_null]
+
+  - name: dim_staff
+    columns:
+      - name: staff_key
+        tests: [unique, not_null]
+
+  - name: dim_actor
+    columns:
+      - name: actor_key
+        tests: [unique, not_null]
+
+  - name: bridge_film_actor
+    description: Factless bridge — one row per (film, actor) pair.
+    columns:
+      - name: film_key
+        tests:
+          - relationships: {to: ref('dim_film'), field: film_key}
+      - name: actor_key
+        tests:
+          - relationships: {to: ref('dim_actor'), field: actor_key}
+
+  - name: fact_rental
+    description: Grain — 1 row per rental transaction.
+    columns:
+      - name: rental_id
+        tests: [unique, not_null]
+      - name: rental_date_key
+        tests:
+          - relationships: {to: ref('dim_date'), field: date_key}
+      - name: return_date_key
+        tests:
+          - relationships: {to: ref('dim_date'), field: date_key}
+      - name: payment_date_key
+        tests:
+          - relationships: {to: ref('dim_date'), field: date_key}
+      - name: customer_key
+        tests:
+          - not_null
+          - relationships: {to: ref('dim_customer'), field: customer_key}
+      - name: film_key
+        tests:
+          - not_null
+          - relationships: {to: ref('dim_film'), field: film_key}
+      - name: store_key
+        tests:
+          - not_null
+          - relationships: {to: ref('dim_store'), field: store_key}
+      - name: staff_key
+        tests:
+          - not_null
+          - relationships: {to: ref('dim_staff'), field: staff_key}
+
+  - name: fact_inventory
+    description: Grain — 1 row per (film, store).
+    columns:
+      - name: film_key
+        tests:
+          - relationships: {to: ref('dim_film'), field: film_key}
+      - name: store_key
+        tests:
+          - relationships: {to: ref('dim_store'), field: store_key}
