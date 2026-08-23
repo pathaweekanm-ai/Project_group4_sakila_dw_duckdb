@@ -1,0 +1,128 @@
+version: 2
+
+models:
+  - name: stg_actor
+    description: One row per actor.
+    columns:
+      - name: actor_id
+        tests: [unique, not_null]
+
+  - name: stg_address
+    columns:
+      - name: address_id
+        tests: [unique, not_null]
+      - name: city_id
+        tests:
+          - relationships: {to: ref('stg_city'), field: city_id}
+
+  - name: stg_category
+    columns:
+      - name: category_id
+        tests: [unique, not_null]
+
+  - name: stg_city
+    columns:
+      - name: city_id
+        tests: [unique, not_null]
+      - name: country_id
+        tests:
+          - relationships: {to: ref('stg_country'), field: country_id}
+
+  - name: stg_country
+    columns:
+      - name: country_id
+        tests: [unique, not_null]
+
+  - name: stg_customer
+    description: One row per customer, includes home store and address.
+    columns:
+      - name: customer_id
+        tests: [unique, not_null]
+      - name: store_id
+        tests:
+          - relationships: {to: ref('stg_store'), field: store_id}
+      - name: address_id
+        tests:
+          - relationships: {to: ref('stg_address'), field: address_id}
+
+  - name: stg_film
+    description: One row per film in the catalog. All 1000 rows use language_id = 1 (English).
+    columns:
+      - name: film_id
+        tests: [unique, not_null]
+      - name: rating
+        tests:
+          - accepted_values: {values: ['G', 'PG', 'PG-13', 'R', 'NC-17']}
+
+  - name: stg_film_actor
+    description: Bridge table — many-to-many between film and actor.
+    columns:
+      - name: film_id
+        tests:
+          - relationships: {to: ref('stg_film'), field: film_id}
+      - name: actor_id
+        tests:
+          - relationships: {to: ref('stg_actor'), field: actor_id}
+
+  - name: stg_film_category
+    description: Bridge table — many-to-many between film and category.
+    columns:
+      - name: film_id
+        tests:
+          - relationships: {to: ref('stg_film'), field: film_id}
+      - name: category_id
+        tests:
+          - relationships: {to: ref('stg_category'), field: category_id}
+
+  - name: stg_inventory
+    description: One row per physical copy of a film held at a store.
+    columns:
+      - name: inventory_id
+        tests: [unique, not_null]
+      - name: film_id
+        tests:
+          - relationships: {to: ref('stg_film'), field: film_id}
+      - name: store_id
+        tests:
+          - relationships: {to: ref('stg_store'), field: store_id}
+
+  - name: stg_language
+    columns:
+      - name: language_id
+        tests: [unique, not_null]
+
+  - name: stg_payment
+    description: One row per payment made against a rental.
+    columns:
+      - name: payment_id
+        tests: [unique, not_null]
+      - name: amount
+        tests: [not_null]
+      - name: rental_id
+        tests:
+          - relationships: {to: ref('stg_rental'), field: rental_id}
+
+  - name: stg_rental
+    description: One row per rental transaction. return_date is null for the 183 rentals not yet returned.
+    columns:
+      - name: rental_id
+        tests: [unique, not_null]
+      - name: inventory_id
+        tests:
+          - relationships: {to: ref('stg_inventory'), field: inventory_id}
+      - name: customer_id
+        tests:
+          - relationships: {to: ref('stg_customer'), field: customer_id}
+
+  - name: stg_staff
+    columns:
+      - name: staff_id
+        tests: [unique, not_null]
+      - name: store_id
+        tests:
+          - relationships: {to: ref('stg_store'), field: store_id}
+
+  - name: stg_store
+    columns:
+      - name: store_id
+        tests: [unique, not_null]
