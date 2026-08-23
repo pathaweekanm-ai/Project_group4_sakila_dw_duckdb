@@ -5,4 +5,4 @@ select
     actor_id,
     first_name,
     last_name
-from {{ ref('stg_actor') }
+from {{ ref('stg_actor') }}
