@@ -200,7 +200,7 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 * **Data Source:** ดึงข้อมูลโดยตรงจาก Schema `main_marts` (Fact & Dimension Tables)
 * **Features:** ครอบคลุมคำถามทางธุรกิจทั้ง 15 ข้อ จัดหมวดหมู่การแสดงผลออกเป็น 6 แท็บ
 * **Documentation:** ดูวิธีรันและขั้นตอน Deploy ได้ที่ [`dashboard/README.md`](dashboard/README.md)
-* **Web Application:** [ลิงก์เข้าใช้งาน Dashboard](ใส่_URL_ตรงนี้) *(ใส่หลัง Deploy บน Streamlit Community Cloud)*
+* **Web Application:** [ลิงก์เข้าใช้งาน Dashboard](https://projectgroup4sakiladwduckdb-3ydsbdb8xgh6wo7433burx.streamlit.app/) *(ใส่หลัง Deploy บน Streamlit Community Cloud)*
 ## โครงสร้าง Repository
 
 ```text
