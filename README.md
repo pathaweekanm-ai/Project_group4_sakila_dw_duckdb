@@ -199,8 +199,7 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 ใช้สำหรับแสดงผลและวิเคราะห์ข้อมูลจาก Data Warehouse ในรูปแบบที่ผู้ใช้งานสามารถโต้ตอบกับข้อมูลได้ โดยพัฒนาด้วย Streamlit Web Application และเชื่อมต่อกับฐานข้อมูล DuckDB โดยตรง เพื่อให้สามารถนำข้อมูลจาก Fact Table และ Dimension Tables มาใช้ในการวิเคราะห์และตอบคำถามทางธุรกิจได้อย่างมีประสิทธิภาพ
 * **Data Source:** ดึงข้อมูลโดยตรงจาก Schema `main_marts` ซึ่งประกอบด้วย Fact Table และ Dimension Tables
 * **Features:** รองรับการวิเคราะห์และตอบคำถามทางธุรกิจทั้ง 15 ข้อ โดยจัดหมวดหมู่การแสดงผลข้อมูลออกเป็น 6 แท็บ เพื่อให้ผู้ใช้งานสามารถเข้าถึงและวิเคราะห์ข้อมูลได้อย่างเป็นระบบ
-* **Documentation:** ดูวิธีรันและขั้นตอน Deploy ได้ที่ [`dashboard/README.md`](dashboard/README.md)
-* **Web Application:** [ลิงก์เข้าใช้งาน Dashboard](https://projectgroup4sakiladwduckdb-3ydsbdb8xgh6wo7433burx.streamlit.app/) *(ใส่หลัง Deploy บน Streamlit Community Cloud)*
+* **Web Application:** [ลิงก์เข้าใช้งาน Dashboard](https://projectgroup4sakiladwduckdb-3ydsbdb8xgh6wo7433burx.streamlit.app/) 
 
 ## โครงสร้าง Repository
 
