@@ -175,32 +175,33 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 
 ## 5. ETL / ELT Process
 
-🟢 **Staging layer เสร็จแล้วและรันผ่านจริง** — ดูรายละเอียดได้ที่ [`sakila_dw_duckdb/`](sakila_dw_duckdb/)
+🟢 **กระบวนการ ETL / ELT เสร็จสมบูรณ์และรันผ่านจริง**— ข้อมูลจากแหล่งต้นทางได้รับการนำเข้า ทำความสะอาด แปลง ตรวจสอบคุณภาพ และโหลดเข้าสู่ Data Warehouse เรียบร้อยแล้ว
 
-- [x] **Extract:** นำข้อมูล CSV ต้นทาง 15 ตารางเข้า DuckDB ด้วย dbt seed (`main_raw`)
+- [x] **Extract:** นำข้อมูล CSV ต้นทางจำนวน 15 ตารางเข้าสู่ DuckDB ด้วย `dbt seed` และจัดเก็บใน Schema `main_raw`
 - [x] **Clean:** กำหนด Column Type และตรวจเช็กความถูกต้องของข้อมูลเบื้องต้น
-- [x] **Transform:** สร้าง Staging Models, เพิ่ม `_loaded_at`, คำนวณ Measure เพิ่มเติม และทำ Snapshot (SCD Type 2)
-- [x] **Data Quality:** ผ่านการทดสอบ (เช็ก PK ไม่ซ้ำ/ไม่ว่าง, เช็ก FK ป้องกันข้อมูลกำพร้า และ Singular Test ดักตรรกะผิดปกติ 2 ข้อ)
-- [ ] **Load:** โหลดข้อมูลเข้าสู่ Fact และ Dimension Tables ใน Schema `marts` (อยู่ระหว่างดำเนินการ)
+- [x] **Transform:** สร้าง Staging Models เพิ่มคอลัมน์ `_loaded_at` คำนวณ Measure เพิ่มเติม และจัดทำ Snapshot เพื่อรองรับการเปลี่ยนแปลงของข้อมูลแบบ SCD Type 2
+- [x] **Data Quality:** ผ่านการทดสอบคุณภาพข้อมูล ได้แก่ ตรวจสอบ Primary Key ไม่ซ้ำและไม่เป็นค่าว่าง ตรวจสอบ Foreign Key เพื่อป้องกันข้อมูลกำพร้า (Orphan Records) และใช้ Singular Test ตรวจจับความผิดปกติทางตรรกะจำนวน 2 ข้อ
+- [x] **Load:** หลดข้อมูลที่ผ่านกระบวนการแปลงแล้วเข้าสู่ Fact Table และ Dimension Tables ภายใต้ Schema `main_marts` เพื่อสร้าง Data Warehouse ในรูปแบบ Star Schema
 
 ## 6. Data Warehouse Database
 
-🟢 **เสร็จแล้ว** — Star Schema เต็มรูปแบบใน DuckDB
-
-* **Database Location:** `sakila_dw_duckdb/sakila_dw.duckdb` (Schema: `main_marts`)
-* **Verification:** ตรวจสอบและทดสอบคิวรีแล้วว่าสามารถตอบคำถามธุรกิจได้ครบถ้วน
-* **รายละเอียดเพิ่มเติม:** ดูตัวอย่างผลลัพธ์ได้ที่ [`sakila_dw_duckdb/README.md`](sakila_dw_duckdb/README.md)
-
+🟢 **เสร็จแล้ว** — Data Warehouse ได้รับการพัฒนาเรียบร้อยในรูปแบบ Star Schema บน DuckDB
+โดยออกแบบโครงสร้างข้อมูลในรูปแบบ Star Schema เพื่อรองรับการวิเคราะห์ข้อมูลและการตอบคำถามทางธุรกิจ ฐานข้อมูลประกอบด้วย Fact Table และ Dimension Tables ที่เชื่อมโยงกันอย่างเหมาะสม และจัดเก็บอยู่ในระบบ DuckDB ภายใต้ Schema `main_marts`
+* **Database Location:** `sakila_dw_duckdb/sakila_dw.duckdb` 
+* **Schema:** `main_marts`
+* **Verification:** ได้ตรวจสอบและทดสอบการทำงานด้วย SQL Query แล้ว พบว่าสามารถนำข้อมูลจาก Data Warehouse ไปใช้วิเคราะห์และตอบคำถามทางธุรกิจที่กำหนดไว้ได้ครบถ้วน
+* 
 ---
 
 ## 7. Interactive Dashboard
 
-🟢 **เสร็จแล้ว** — Streamlit Web Application สำหรับแสดงผลข้อมูล
-
-* **Data Source:** ดึงข้อมูลโดยตรงจาก Schema `main_marts` (Fact & Dimension Tables)
-* **Features:** ครอบคลุมคำถามทางธุรกิจทั้ง 15 ข้อ จัดหมวดหมู่การแสดงผลออกเป็น 6 แท็บ
+🟢 **เสร็จแล้ว** — พัฒนา Interactive Dashboard ในรูปแบบ Streamlit Web Application เรียบร้อยแล้ว
+ใช้สำหรับแสดงผลและวิเคราะห์ข้อมูลจาก Data Warehouse ในรูปแบบที่ผู้ใช้งานสามารถโต้ตอบกับข้อมูลได้ โดยพัฒนาด้วย Streamlit Web Application และเชื่อมต่อกับฐานข้อมูล DuckDB โดยตรง เพื่อให้สามารถนำข้อมูลจาก Fact Table และ Dimension Tables มาใช้ในการวิเคราะห์และตอบคำถามทางธุรกิจได้อย่างมีประสิทธิภาพ
+* **Data Source:** ดึงข้อมูลโดยตรงจาก Schema `main_marts` ซึ่งประกอบด้วย Fact Table และ Dimension Tables
+* **Features:** รองรับการวิเคราะห์และตอบคำถามทางธุรกิจทั้ง 15 ข้อ โดยจัดหมวดหมู่การแสดงผลข้อมูลออกเป็น 6 แท็บ เพื่อให้ผู้ใช้งานสามารถเข้าถึงและวิเคราะห์ข้อมูลได้อย่างเป็นระบบ
 * **Documentation:** ดูวิธีรันและขั้นตอน Deploy ได้ที่ [`dashboard/README.md`](dashboard/README.md)
 * **Web Application:** [ลิงก์เข้าใช้งาน Dashboard](https://projectgroup4sakiladwduckdb-3ydsbdb8xgh6wo7433burx.streamlit.app/) *(ใส่หลัง Deploy บน Streamlit Community Cloud)*
+
 ## โครงสร้าง Repository
 
 ```text
