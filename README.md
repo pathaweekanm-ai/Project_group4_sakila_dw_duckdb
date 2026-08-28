@@ -232,8 +232,7 @@ Fact Table ทั้งสองสามารถใช้ Dimension Tables บ
 ---
 
 ## Team Contribution
-
-> 🚧 ยังไม่เริ่ม — จะอ้างอิงจาก GitHub Project board และ commit history เมื่อทีมเริ่มทำงานจริง
+[ภาพประกอบ](https://drive.google.com/drive/folders/1pbanxLkRn5KqPxC1krasU5u8DdZBkNRD?usp=sharing)
 
 ---
 
