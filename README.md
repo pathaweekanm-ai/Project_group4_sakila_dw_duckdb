@@ -39,7 +39,6 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 
 <img width="5334" height="3000" alt="er_diagram-1" src="https://github.com/user-attachments/assets/34f59cf8-3229-4010-b81b-c84508be7c88" />
 
-
 ---
 
 ## 2. Business Questions
@@ -117,9 +116,9 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 | **Dim_Staff** | พนักงาน → สาขาที่สังกัด | `full_name`, `store_id` | `stg_staff` |
 | **Dim_Actor** | นักแสดง | `first_name`, `last_name` | `stg_actor`  |
 
-**Dim_Date เป็น Role-Playing Dimension**  โดยใช้ตารางเดียวกันสำหรับวันที่เช่า (`rental_date_key`) วันที่คืน (`return_date_key`) และวันที่ชำระเงิน (`payment_date_key`) โดย Join ตาราง `Dim_Date` ด้วย Alias ที่แตกต่างกัน ไม่จำเป็นต้องสร้างตารางวันที่ 3 ตาราง
+> **Dim_Date เป็น Role-Playing Dimension**  โดยใช้ตารางเดียวกันสำหรับวันที่เช่า (`rental_date_key`) วันที่คืน (`return_date_key`) และวันที่ชำระเงิน (`payment_date_key`) โดย Join ตาราง `Dim_Date` ด้วย Alias ที่แตกต่างกัน ไม่จำเป็นต้องสร้างตารางวันที่ 3 ตาราง
 
-**Dim_Film เลือกใช้ Star Schema** โดยรวมข้อมูล Category และ Language ไว้ใน `Dim_Film` เพื่อให้โครงสร้างไม่ซับซ้อนและ Query ได้ง่าย เนื่องจากข้อมูลมีเพียง 16 หมวดหมู่และ 1 ภาษา จึงไม่จำเป็นต้องแยกเป็น Snowflake Schema
+> **Dim_Film เลือกใช้ Star Schema** โดยรวมข้อมูล Category และ Language ไว้ใน `Dim_Film` เพื่อให้โครงสร้างไม่ซับซ้อนและ Query ได้ง่าย เนื่องจากข้อมูลมีเพียง 16 หมวดหมู่และ 1 ภาษา จึงไม่จำเป็นต้องแยกเป็น Snowflake Schema
 
 ---
 ### 3. Fact Table และ Measure
@@ -135,9 +134,9 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 | `payment_lag_days` | `payment_date − rental_date` | **ใช้ AVG เป็นหลัก** | วิเคราะห์ระยะเวลาการชำระเงิน |
 | `is_returned` | 1 = คืนแล้ว, 0 = ยังไม่คืน | **flag** | ใช้กรองและวิเคราะห์สถานะการคืน |
 
-**Foreign Key ที่ต้องมี:** `rental_date_key`, `return_date_key`, `payment_date_key` (→ `Dim_Date` 3 บทบาท), `customer_key` (→ `Dim_Customer`), `film_key` (→ `Dim_Film`), `store_key` (→ `Dim_Store`), และ `staff_key` (→ `Dim_Staff`)
+> **Foreign Key ที่ต้องมี:** `rental_date_key`, `return_date_key`, `payment_date_key` (→ `Dim_Date` 3 บทบาท), `customer_key` (→ `Dim_Customer`), `film_key` (→ `Dim_Film`), `store_key` (→ `Dim_Store`), และ `staff_key` (→ `Dim_Staff`)
 
-ส่วน `rental_id` และ `inventory_id` เป็น Degenerate Dimension เก็บไว้สำหรับตรวจสอบและเชื่อมโยงกลับไปยังข้อมูลต้นทาง โดยไม่ต้องสร้าง Dimension Table แยก
+> ส่วน `rental_id` และ `inventory_id` เป็น Degenerate Dimension เก็บไว้สำหรับตรวจสอบและเชื่อมโยงกลับไปยังข้อมูลต้นทาง โดยไม่ต้องสร้าง Dimension Table แยก
 
 #### Fact_Inventory ( Fact Table ตัวที่สอง — สำหรับ BQ09, BQ10)
 
@@ -149,7 +148,7 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 | `rental_count_to_date` | COUNT(`rental_id`) จาก `Fact_Rental` ตามภาพยนต์และสาขา | **Additive** |
 | `utilization_ratio` | `rental_count_to_date / inventory_count` | **Non-additive** |
 
-**หมายเหตุ:** `utilization_ratio` เป็นอัตราส่วน จึงไม่ควรนำมารวม (SUM) หรือเฉลี่ยโดยตรง ควรรวมตัวตั้งและตัวหารก่อน แล้วจึงคำนวณอัตราส่วน
+> **หมายเหตุ:** `utilization_ratio` เป็นอัตราส่วน จึงควรคำนวณใหม่เมื่อสรุปข้อมูลในระดับรวม
 ---
 
 ### 4. เช็คความครบถ้วน — ทุกคำถามธุรกิจตอบได้จาก 2 fact table นี้
@@ -171,35 +170,44 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 
 <img width="1582" height="1838" alt="Untitled" src="https://github.com/user-attachments/assets/3d4d21ff-4e66-48cf-82ed-d085e76c3a63" />
 
-<br> มี Fact_Rental เป็น Main Fact และ Fact_Inventory เป็นอีก Fact Table ซึ่งใช้ Dimension บางส่วนร่วมกัน
+<br> โครงสร้าง Data Model ของโครงการได้รับการออกแบบในรูปแบบ Galaxy Schema ซึ่งประกอบด้วย Star Schema มากกว่าหนึ่งชุด โดยมี Fact Table จำนวน 2 ตาราง ได้แก่ Fact_Rental ซึ่งเป็น Main Fact สำหรับวิเคราะห์ข้อมูลธุรกรรมการเช่าภาพยนตร์ และ Fact_Inventory สำหรับวิเคราะห์ข้อมูลสินค้าคงคลังและการใช้ประโยชน์จากภาพยนตร์ในแต่ละสาขา
+
+Fact Table ทั้งสองสามารถใช้ Dimension Tables บางส่วนร่วมกันได้ เช่น Dimension ที่เกี่ยวข้องกับภาพยนตร์ สาขา และเวลา ทำให้สามารถวิเคราะห์ข้อมูลจากหลายมุมมองได้อย่างเป็นระบบ ลดความซ้ำซ้อนของข้อมูล และรองรับคำถามทางธุรกิจที่หลากหลายมากขึ้น
+
+โดยโครงสร้างนี้ช่วยให้สามารถวิเคราะห์ทั้งข้อมูลด้าน ธุรกรรมการเช่า (Rental) และ ข้อมูลสินค้าคงคลัง (Inventory) ได้ภายใน Data Warehouse เดียวกัน
 
 ## 5. ETL / ELT Process
 
-🟢 **กระบวนการ ETL / ELT เสร็จสมบูรณ์และรันผ่านจริง**— ข้อมูลจากแหล่งต้นทางได้รับการนำเข้า ทำความสะอาด แปลง ตรวจสอบคุณภาพ และโหลดเข้าสู่ Data Warehouse เรียบร้อยแล้ว
+🟢 **กระบวนการ ETL / ELT เสร็จสมบูรณ์และรันผ่านจริง** — ข้อมูลจากแหล่งต้นทางได้รับการนำเข้า ทำความสะอาด แปลง ตรวจสอบคุณภาพ และโหลดเข้าสู่ Data Warehouse เรียบร้อยแล้ว
 
 - [x] **Extract:** นำข้อมูล CSV ต้นทางจำนวน 15 ตารางเข้าสู่ DuckDB ด้วย `dbt seed` และจัดเก็บใน Schema `main_raw`
-- [x] **Clean:** กำหนด Column Type และตรวจเช็กความถูกต้องของข้อมูลเบื้องต้น
-- [x] **Transform:** สร้าง Staging Models เพิ่มคอลัมน์ `_loaded_at` คำนวณ Measure เพิ่มเติม และจัดทำ Snapshot เพื่อรองรับการเปลี่ยนแปลงของข้อมูลแบบ SCD Type 2
-- [x] **Data Quality:** ผ่านการทดสอบคุณภาพข้อมูล ได้แก่ ตรวจสอบ Primary Key ไม่ซ้ำและไม่เป็นค่าว่าง ตรวจสอบ Foreign Key เพื่อป้องกันข้อมูลกำพร้า (Orphan Records) และใช้ Singular Test ตรวจจับความผิดปกติทางตรรกะจำนวน 2 ข้อ
-- [x] **Load:** หลดข้อมูลที่ผ่านกระบวนการแปลงแล้วเข้าสู่ Fact Table และ Dimension Tables ภายใต้ Schema `main_marts` เพื่อสร้าง Data Warehouse ในรูปแบบ Star Schema
+- [x] **Clean:** กำหนดประเภทข้อมูลของแต่ละคอลัมน์ (Column Type) และตรวจสอบความถูกต้องของข้อมูลเบื้องต้น
+- [x] **Transform:** สร้าง Staging Models เพิ่มคอลัมน์ `_loaded_at` คำนวณ Measures เพิ่มเติม และจัดทำ Snapshot เพื่อรองรับการเปลี่ยนแปลงของข้อมูลแบบ SCD Type 2
+- [x] **Data Quality:** ผ่านการทดสอบคุณภาพข้อมูล ได้แก่ การตรวจสอบ Primary Key ไม่ซ้ำและไม่เป็นค่าว่าง การตรวจสอบ Foreign Key เพื่อป้องกันข้อมูลกำพร้า (Orphan Records) และใช้ Singular Test ตรวจจับความผิดปกติทางตรรกะจำนวน 2 ข้อ
+- [x] **Load:** โหลดข้อมูลที่ผ่านกระบวนการแปลงแล้วเข้าสู่ Fact Table และ Dimension Tables ภายใต้ Schema `main_marts` เพื่อสร้าง Data Warehouse ในรูปแบบ Star Schema
+---
 
 ## 6. Data Warehouse Database
 
 🟢 **เสร็จแล้ว** — Data Warehouse ได้รับการพัฒนาเรียบร้อยในรูปแบบ Star Schema บน DuckDB
-โดยออกแบบโครงสร้างข้อมูลในรูปแบบ Star Schema เพื่อรองรับการวิเคราะห์ข้อมูลและการตอบคำถามทางธุรกิจ ฐานข้อมูลประกอบด้วย Fact Table และ Dimension Tables ที่เชื่อมโยงกันอย่างเหมาะสม และจัดเก็บอยู่ในระบบ DuckDB ภายใต้ Schema `main_marts`
-* **Database Location:** `sakila_dw_duckdb/sakila_dw.duckdb` 
-* **Schema:** `main_marts`
-* **Verification:** ได้ตรวจสอบและทดสอบการทำงานด้วย SQL Query แล้ว พบว่าสามารถนำข้อมูลจาก Data Warehouse ไปใช้วิเคราะห์และตอบคำถามทางธุรกิจที่กำหนดไว้ได้ครบถ้วน
-* 
+
+> ฐานข้อมูลได้รับการออกแบบในรูปแบบ Star Schema เพื่อรองรับการวิเคราะห์ข้อมูลและการตอบคำถามทางธุรกิจ โดยประกอบด้วย Fact Table และ Dimension Tables ที่เชื่อมโยงกันอย่างเหมาะสม และจัดเก็บอยู่ในระบบ DuckDB ภายใต้ Schema `main_marts`
+
+- **Database Location:** `sakila_dw_duckdb/sakila_dw.duckdb`
+- **Schema:** `main_marts`
+- **Verification:** ได้ตรวจสอบและทดสอบการทำงานด้วย SQL Query แล้ว พบว่าสามารถนำข้อมูลจาก Data Warehouse ไปใช้วิเคราะห์และตอบคำถามทางธุรกิจที่กำหนดไว้ได้ครบถ้วน
 ---
 
 ## 7. Interactive Dashboard
 
 🟢 **เสร็จแล้ว** — พัฒนา Interactive Dashboard ในรูปแบบ Streamlit Web Application เรียบร้อยแล้ว
-ใช้สำหรับแสดงผลและวิเคราะห์ข้อมูลจาก Data Warehouse ในรูปแบบที่ผู้ใช้งานสามารถโต้ตอบกับข้อมูลได้ โดยพัฒนาด้วย Streamlit Web Application และเชื่อมต่อกับฐานข้อมูล DuckDB โดยตรง เพื่อให้สามารถนำข้อมูลจาก Fact Table และ Dimension Tables มาใช้ในการวิเคราะห์และตอบคำถามทางธุรกิจได้อย่างมีประสิทธิภาพ
-* **Data Source:** ดึงข้อมูลโดยตรงจาก Schema `main_marts` ซึ่งประกอบด้วย Fact Table และ Dimension Tables
-* **Features:** รองรับการวิเคราะห์และตอบคำถามทางธุรกิจทั้ง 15 ข้อ โดยจัดหมวดหมู่การแสดงผลข้อมูลออกเป็น 6 แท็บ เพื่อให้ผู้ใช้งานสามารถเข้าถึงและวิเคราะห์ข้อมูลได้อย่างเป็นระบบ
-* **Web Application:** [ลิงก์เข้าใช้งาน Dashboard](https://projectgroup4sakiladwduckdb-3ydsbdb8xgh6wo7433burx.streamlit.app/) 
+
+> Interactive Dashboard ถูกพัฒนาขึ้นเพื่อใช้สำหรับแสดงผลและวิเคราะห์ข้อมูลจาก Data Warehouse ในรูปแบบที่ผู้ใช้งานสามารถโต้ตอบกับข้อมูลได้ โดยเชื่อมต่อกับฐานข้อมูล DuckDB เพื่อนำข้อมูลจาก Fact Table และ Dimension Tables มาใช้ในการวิเคราะห์และตอบคำถามทางธุรกิจได้อย่างมีประสิทธิภาพ
+
+- **Data Source:** ดึงข้อมูลโดยตรงจาก Schema `main_marts` ซึ่งประกอบด้วย Fact Table และ Dimension Tables
+- **Features:** รองรับการวิเคราะห์และตอบคำถามทางธุรกิจทั้ง 15 ข้อ โดยจัดหมวดหมู่การแสดงผลออกเป็น 6 แท็บ เพื่อให้ผู้ใช้งานสามารถเข้าถึงและวิเคราะห์ข้อมูลได้อย่างเป็นระบบ
+- **Web Application:** [ลิงก์เข้าใช้งาน Dashboard](https://projectgroup4sakiladwduckdb-3ydsbdb8xgh6wo7433burx.streamlit.app/)
+---
 
 ## โครงสร้าง Repository
 
@@ -207,13 +215,19 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 .
 ├── README.md
 ├── docs/
-│   ├── business_questions.md     # คำถามธุรกิจ 15 ข้อ (ล็อกแล้ว)
-│   ├── er_diagram_source.png     # ER Diagram ต้นทาง
+│   ├── business_questions.md      # คำถามธุรกิจ 15 ข้อ
+│   ├── er_diagram_source.png     # ER Diagram ของฐานข้อมูลต้นทาง
 │   ├── er_diagram_source.svg
-│   └── generate_er_diagram.py   # สคริปต์สร้าง ER Diagram จาก schema
-├── sakila_dw_duckdb/             # โปรเจกต์ dbt — staging layer (seed→run→test→snapshot ผ่านแล้ว)
-│   └── README.md                 # อธิบายโครงสร้าง dbt project และผลรันล่าสุด
-└── dashboard/                    # TODO: ไฟล์/ลิงก์ที่เกี่ยวกับแดชบอร์ด
+│   └── generate_er_diagram.py    # สคริปต์สร้าง ER Diagram
+│
+├── sakila_dw_duckdb/             # ขั้นตอน ETL/ELT และ Data Warehouse
+│   ├── README.md                  # เอกสารรายละเอียด ETL/ELT และ Data Warehouse
+│   ├── sakila_dw.duckdb          # ฐานข้อมูล Data Warehouse
+│   └── ...                       # dbt models, seeds, tests และ snapshots
+│
+└── dashboard/                    # Interactive Dashboard
+    ├── app.py                    # Streamlit Web Application
+    └── README.md                 # วิธีรันและ Deploy
 ```
 ---
 
