@@ -234,7 +234,8 @@ Fact Table ทั้งสองสามารถใช้ Dimension Tables บ
 ## Team Contribution
 |หน้าที่|ชื่อ|
 |---|---|
-[ภาพประกอบ](https://drive.google.com/drive/folders/1pbanxLkRn5KqPxC1krasU5u8DdZBkNRD?usp=sharing)
+
+> [ภาพประกอบ](https://drive.google.com/drive/folders/1pbanxLkRn5KqPxC1krasU5u8DdZBkNRD?usp=sharing)
 
 ---
 
