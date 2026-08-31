@@ -106,7 +106,7 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 ---
 
 ### 2. Dimension ทั้งหมดและระดับ (Level)
-
+ใช้สำหรับวิเคราะห์พฤติกรรมการเช่าและรายได้ของลูกค้า โดยสามารถวิเคราะห์ได้ตั้งแต่ระดับลูกค้ารายบุคคล และ Roll-up ไปยังเมืองหรือประเทศเพื่อเปรียบเทียบตามพื้นที่
 | Dimension | Level (จากละเอียด → หยาบ) | Attribute หลัก | มาจากตาราง staging |
 |---|---|---|---|
 | **Dim_Date** | วัน → สัปดาห์ → เดือน → ไตรมาส → ปี | `full_date`, `day_of_week_name`, `is_weekend`, `week_of_year`, `month_name`, `quarter`, `year` | generate เอง |
