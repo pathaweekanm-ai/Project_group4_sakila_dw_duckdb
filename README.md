@@ -124,6 +124,8 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 ### 3. Fact Table และ Measure
 
 #### Fact_Rental (Main Fact)
+**เป็น Fact หลักของ Data Warehouse**
+Fact นี้ใช้สำหรับตอบ Business Questions ที่เกี่ยวข้องกับจำนวนการเช่า รายได้ ลูกค้า ภาพยนตร์ สาขา พนักงาน และพฤติกรรมการคืนสินค้า เช่น BQ01–BQ08, BQ11 และ BQ13–BQ15
 
 | Measure | สูตร/ที่มา | ประเภท | หมายเหตุ |
 |---|---|---|---|
