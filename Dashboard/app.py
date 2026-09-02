@@ -33,31 +33,48 @@ PROFILES_YML = """sakila_dw_duckdb:
       threads: 4
 """
 
-# ── palette (validated — dataviz skill, references/palette.md) ─────────────
-# Full 8-slot categorical order. The order is the CVD-safety mechanism —
-# never reorder or cycle past slot 8.
-SERIES = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7", "#e34948"]
+# ── palette — "aurora" theme, white background ──────────────────────────────
+# Same violet -> magenta -> gold gradient family as the dark version, rebuilt
+# for a WHITE page: the direction of the ramp flips (on a light surface
+# "prominent" means darker/more saturated, not brighter — the opposite of the
+# dark-page version), and the gold end had to move down in lightness, because
+# the pale gold that popped off a near-black page is nearly invisible on
+# white (contrast collapses under 2:1 there). Deep violet takes over as the
+# "most prominent" end instead. Still a deliberate one-hue-family trade
+# against the dataviz skill's default "sequential = one hue, categorical
+# hues stay far apart" rule — every chart still ships visible value labels
+# as the mitigation. Contrast vs white ranges ~3.0–13.5:1 across the family.
+PAGE_BG = "#ffffff"
+CARD_BG = "#ffffff"
+TEXT_PRIMARY = "#241a33"
+TEXT_SECONDARY = "#6b5f80"
+GRID_COLOR = "#ece7f3"
+AXIS_COLOR = "#d9d2e8"
 
-# Single-hue sequential ramp (blue), light -> dark, the 13 documented steps
-# (100..700). Used only for genuinely ORDERED data — a value-sorted axis or
-# true chronological order — never as a second encoding of an unordered
-# nominal axis (that double-encodes what bar length already shows).
+# 8-slot categorical order, sampled from the gradient at spread-out (not
+# adjacent) positions so consecutive slots jump across the family rather than
+# drifting through it. Never reorder past slot 8.
+SERIES = ["#d47a8f", "#8b356f", "#ca5d86", "#712f67", "#be437d", "#572860", "#a43c76", "#3d2159"]
+
+# The gradient itself, as a 13-step ramp: pale gold (recedes toward the white
+# page, low values) -> rose/magenta -> deep violet (most contrast against
+# white, high values) — light -> dark, same convention _sequential_shades()
+# was written against originally.
 SEQUENTIAL = [
-    "#cde2fb", "#b7d3f6", "#9ec5f4", "#86b6ef", "#6da7ec", "#5598e7",
-    "#3987e5", "#2a78d6", "#256abf", "#1c5cab", "#184f95", "#104281", "#0d366b",
+    "#f3d9ae", "#ebc0a6", "#e3a79e", "#da8e96", "#d2768e", "#ca5d86",
+    "#c2447e", "#ac3e78", "#963872", "#80326c", "#692d65", "#53275f", "#3d2159",
 ]
 
-# Pastel categorical variants — light tints of the documented hues, checked
-# with the dataviz skill's palette validator (node scripts/validate_palette.js):
-# all slots clear the lightness band, chroma floor, and CVD checks in light
-# mode; contrast lands in the WARN band, so every chart using these ships
-# visible value labels on the bars (the required "relief" channel).
-PASTEL5 = ["#4a8cdc", "#ee7f52", "#3dbb8e", "#eda100", "#eb8fb2"]
-PASTEL7 = PASTEL5 + ["#59ae59", "#897fc6"]
+# Softer variants — SERIES lightened toward white. slot 0's tint lands just
+# under the 3:1 mark (2.5:1) — the one spot in this palette that leans
+# entirely on its value label rather than contrast to be read.
+PASTEL5 = ["#db8fa1", "#9e5586", "#d27799", "#88507f", "#c86192"]
+PASTEL7 = PASTEL5 + ["#724a79", "#b35b8c"]
 
-# Documented diverging pair (blue <-> red) for "which side of zero" charts.
-DIVERGE_NEG = "#2a78d6"  # early / negative side
-DIVERGE_POS = "#e34948"  # late / positive side
+# Diverging pair on the family's own cool (violet) and warm (rose) ends, for
+# "which side of zero" charts.
+DIVERGE_NEG = "#712f67"  # early / negative side
+DIVERGE_POS = "#ca5d86"  # late / positive side
 
 
 def _lerp_hex(a, b, t):
@@ -70,16 +87,18 @@ def _lerp_hex(a, b, t):
 
 
 def _sequential_shades(n, dark_first=True):
-    """Sample n shades from the documented blue SEQUENTIAL ramp — for
+    """Sample n shades from the gold->violet SEQUENTIAL ramp — for
     genuinely ORDERED data only (rank on a value-sorted axis, or true
     chronological order).
-    dark_first=True  -> row 0 gets the darkest shade (row 0 is the highest
-                         value / earliest point in a descending-sorted df).
-    dark_first=False -> row 0 gets the lightest shade (df sorted ascending).
+    dark_first=True  -> row 0 gets the darkest (deep violet) shade — row 0 is
+                         the highest value / earliest point in a
+                         descending-sorted df.
+    dark_first=False -> row 0 gets the lightest (pale gold) shade — df sorted
+                         ascending.
     """
     if n <= 1:
         return [SEQUENTIAL[9]]
-    lo, hi = 2, len(SEQUENTIAL) - 1  # stay clear of the near-white steps
+    lo, hi = 2, len(SEQUENTIAL) - 1  # stay clear of the palest near-white step
     shades = []
     for i in range(n):
         idx = lo + (hi - lo) * i / (n - 1)
@@ -101,13 +120,14 @@ def _plain_layout(fig, title=None, y_title=None, x_title=None, showlegend=False)
         title=title or "",
         showlegend=showlegend,
         margin=dict(l=10, r=10, t=40 if title else 10, b=10),
-        plot_bgcolor="rgba(0,0,0,0)",
-        paper_bgcolor="rgba(0,0,0,0)",
-        font=dict(family="Inter, sans-serif", size=13),
-        xaxis=dict(title=x_title, showgrid=False, showline=True, linecolor="#d8d6ce"),
-        yaxis=dict(title=y_title, showgrid=True, gridcolor="#eeece5", zeroline=False),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
-        hoverlabel=dict(bgcolor="white"),
+        plot_bgcolor=CARD_BG,
+        paper_bgcolor=CARD_BG,
+        font=dict(family="Inter, sans-serif", size=13, color=TEXT_SECONDARY),
+        xaxis=dict(title=x_title, showgrid=False, showline=True, linecolor=AXIS_COLOR, color=TEXT_SECONDARY),
+        yaxis=dict(title=y_title, showgrid=True, gridcolor=GRID_COLOR, zeroline=False, color=TEXT_SECONDARY),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0, font=dict(color=TEXT_SECONDARY)),
+        hoverlabel=dict(bgcolor=CARD_BG, font=dict(color=TEXT_PRIMARY), bordercolor=AXIS_COLOR),
+        title_font=dict(color=TEXT_PRIMARY),
     )
     return fig
 
@@ -220,9 +240,9 @@ with tabs[0]:
         fig = px.line(revenue_month, x="period", y="revenue", markers=True)
         fig.update_traces(
             line=dict(width=3, color=SEQUENTIAL[9]),
-            marker=dict(size=9, color=SEQUENTIAL[9], line=dict(width=2, color="white")),
+            marker=dict(size=9, color=SEQUENTIAL[9], line=dict(width=2, color=CARD_BG)),
             fill="tozeroy",
-            fillcolor="rgba(42,120,214,0.14)",
+            fillcolor="rgba(128,50,108,0.14)",  # SEQUENTIAL[9] at low alpha
         )
         _plain_layout(fig, y_title="รายได้ (บาท)", x_title=None)
         st.plotly_chart(fig, use_container_width=True)
@@ -432,7 +452,7 @@ with tabs[3]:
             text=days_late["avg_days_late"], texttemplate="%{text:+.2f}", textposition="outside",
         ))
         _plain_layout(fig, y_title="วันคืนช้า (+) / เร็ว (-) เฉลี่ย")
-        fig.update_yaxes(zeroline=True, zerolinecolor="#c3c2b7", zerolinewidth=1.5)
+        fig.update_yaxes(zeroline=True, zerolinecolor="#b3a8c9", zerolinewidth=1.5)
         st.plotly_chart(fig, use_container_width=True)
 
     st.subheader("BQ10 — หนังที่มี stock ไม่เพียงพอเทียบกับความต้องการเช่า (utilization สูงสุด)")
