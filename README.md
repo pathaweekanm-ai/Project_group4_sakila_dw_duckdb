@@ -211,7 +211,7 @@ Fact Table ทั้งสองสามารถใช้ Dimension Tables ร
 > Interactive Dashboard ถูกพัฒนาขึ้นเพื่อใช้สำหรับแสดงผลและวิเคราะห์ข้อมูลจาก Data Warehouse ในรูปแบบที่ผู้ใช้งานสามารถโต้ตอบกับข้อมูลได้ โดยเชื่อมต่อกับฐานข้อมูล DuckDB เพื่อนำข้อมูลจาก Fact Table และ Dimension Tables มาใช้ในการวิเคราะห์และตอบคำถามทางธุรกิจได้อย่างมีประสิทธิภาพ
 
 - **Data Source:** ดึงข้อมูลโดยตรงจาก Schema `main_marts` ซึ่งประกอบด้วย Fact Table และ Dimension Tables
-- **Features:** รองรับการวิเคราะห์และตอบคำถามทางธุรกิจทั้ง 15 ข้อ โดยจัดหมวดหมู่การแสดงผลออกเป็น 6 แท็บ เพื่อให้ผู้ใช้งานสามารถเข้าถึงและวิเคราะห์ข้อมูลได้อย่างเป็นระบบ
+- **Features:** รองรับการวิเคราะห์และตอบคำถามทางธุรกิจทั้ง 16 ข้อ โดยจัดหมวดหมู่การแสดงผลออกเป็น 5 แท็บ เพื่อให้ผู้ใช้งานสามารถเข้าถึงและวิเคราะห์ข้อมูลได้อย่างเป็นระบบ
 - **Web Application:** [ลิงก์เข้าใช้งาน Dashboard](https://projectgroup4sakiladwduckdb-3ydsbdb8xgh6wo7433burx.streamlit.app/)
 ---
 
@@ -221,7 +221,7 @@ Fact Table ทั้งสองสามารถใช้ Dimension Tables ร
 .
 ├── README.md
 ├── docs/
-│   ├── business_questions.md      # คำถามธุรกิจ 15 ข้อ
+│   ├── business_questions.md      # คำถามธุรกิจ 16 ข้อ
 │   ├── er_diagram_source.png     # ER Diagram ของฐานข้อมูลต้นทาง
 │   ├── er_diagram_source.svg
 │   └── generate_er_diagram.py    # สคริปต์สร้าง ER Diagram
