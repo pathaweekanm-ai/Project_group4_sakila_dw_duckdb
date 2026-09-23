@@ -227,7 +227,7 @@ Fact Table ทั้งสองสามารถใช้ Dimension Tables ร
 │
 └── dashboard/                    # Interactive Dashboard
     ├── app.py                    # Streamlit Web Application
-    └── README.md                 # วิธีรันและ Deploy
+    └── data_explorer.py          # Streamlit Web Table
 ```
 ---
 
