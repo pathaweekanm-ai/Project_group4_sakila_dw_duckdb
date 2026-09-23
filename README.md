@@ -184,8 +184,6 @@ Fact Table ทั้งสองสามารถใช้ Dimension Tables ร
 
 ## 5. ELT Process (Extract, Load, Transform)
 
-🟢 **ELT เสร็จสมบูรณ์และรันผ่านจริง** — ข้อมูลจากแหล่งต้นทางได้รับการนำเข้า ทำความสะอาด แปลง ตรวจสอบคุณภาพ และโหลดเข้าสู่ Data Warehouse เรียบร้อยแล้ว
-
 - [x] **Extract & Load (E-L):** นำข้อมูลดิบจาก CSV ทั้ง 15 ตารางถูกนำเข้าและจัดเก็บลงใน DuckDB ที่ Schema `main_raw`  ก่อนเป็นลำดับแรกผ่าน  `dbt seed`
 - [x] **Clean:** กำหนดประเภทข้อมูลของแต่ละคอลัมน์ (Column Type) และตรวจสอบความถูกต้องของข้อมูลเบื้องต้น
 - [x] **Transform:** สร้าง Staging Models เพิ่มคอลัมน์ `_loaded_at` คำนวณ Measures เพิ่มเติม และจัดทำ Snapshot เพื่อรองรับการเปลี่ยนแปลงของข้อมูลแบบ SCD Type 2
@@ -195,8 +193,6 @@ Fact Table ทั้งสองสามารถใช้ Dimension Tables ร
 
 ## 6. Data Warehouse Database
 
-🟢 **เสร็จแล้ว** — Data Warehouse ได้รับการพัฒนาเรียบร้อยในรูปแบบ Star Schema บน DuckDB
-
 > ฐานข้อมูลได้รับการออกแบบในรูปแบบ Star Schema เพื่อรองรับการวิเคราะห์ข้อมูลและการตอบคำถามทางธุรกิจ โดยประกอบด้วย Fact Table และ Dimension Tables ที่เชื่อมโยงกันอย่างเหมาะสม และจัดเก็บอยู่ในระบบ DuckDB ภายใต้ Schema `main_marts`
 
 - **Database Location:** `sakila_dw_duckdb/sakila_dw.duckdb`
@@ -205,8 +201,6 @@ Fact Table ทั้งสองสามารถใช้ Dimension Tables ร
 ---
 
 ## 7. Interactive Dashboard
-
-🟢 **เสร็จแล้ว** — พัฒนา Interactive Dashboard ในรูปแบบ Streamlit Web Application เรียบร้อยแล้ว
 
 > Interactive Dashboard ถูกพัฒนาขึ้นเพื่อใช้สำหรับแสดงผลและวิเคราะห์ข้อมูลจาก Data Warehouse ในรูปแบบที่ผู้ใช้งานสามารถโต้ตอบกับข้อมูลได้ โดยเชื่อมต่อกับฐานข้อมูล DuckDB เพื่อนำข้อมูลจาก Fact Table และ Dimension Tables มาใช้ในการวิเคราะห์และตอบคำถามทางธุรกิจได้อย่างมีประสิทธิภาพ
 
