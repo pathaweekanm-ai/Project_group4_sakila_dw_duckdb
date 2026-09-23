@@ -189,7 +189,7 @@ Fact Table ทั้งสองสามารถใช้ Dimension Tables ร
 - [x] **Extract & Load (E-L):** นำข้อมูลดิบจาก CSV ทั้ง 15 ตารางถูกนำเข้าและจัดเก็บลงใน DuckDB ที่ Schema `main_raw`  ก่อนเป็นลำดับแรกผ่าน  `dbt seed`
 - [x] **Clean:** กำหนดประเภทข้อมูลของแต่ละคอลัมน์ (Column Type) และตรวจสอบความถูกต้องของข้อมูลเบื้องต้น
 - [x] **Transform:** สร้าง Staging Models เพิ่มคอลัมน์ `_loaded_at` คำนวณ Measures เพิ่มเติม และจัดทำ Snapshot เพื่อรองรับการเปลี่ยนแปลงของข้อมูลแบบ SCD Type 2
-- [x] **Data Quality:** ผ่านการทดสอบคุณภาพข้อมูล ได้แก่ การตรวจสอบ Primary Key ไม่ซ้ำและไม่เป็นค่าว่าง การตรวจสอบ Foreign Key เพื่อป้องกันข้อมูลกำพร้า (Orphan Records) และใช้ Singular Test ตรวจจับความผิดปกติทางตรรกะจำนวน 2 ข้อ
+- [x] **Data Quality:** ผ่านการทดสอบคุณภาพข้อมูล ได้แก่ การตรวจสอบ Primary Key ไม่ซ้ำและไม่เป็นค่าว่าง การตรวจสอบ Foreign Key เพื่อป้องกันข้อมูลกำพร้า (Orphan Records) และใช้ Singular Test ตรวจจับความผิดปกติทางตรรกะจำนวน 3 ข้อ คือ 1) ตรวจว่าจำนวนแถวใน stg_rental (staging) เท่ากับจำนวนแถวใน fact_rental (fact table สุดท้าย) หรือไม่ 2) ตรวจว่าเงินที่ลูกค้าจ่ายค่าเช่าหนัง (payment amount) ห้ามติดลบ 3) ตรวจว่า return_date ห้ามมาก่อน rental_date โดยข้ามกรณีที่ return_date เป็น NULL
 - [x] **Load:** โหลดข้อมูลที่ผ่านกระบวนการแปลงแล้วเข้าสู่ Fact Table และ Dimension Tables ภายใต้ Schema `main_marts` เพื่อสร้าง Data Warehouse ในรูปแบบ Star Schema
 ---
 
