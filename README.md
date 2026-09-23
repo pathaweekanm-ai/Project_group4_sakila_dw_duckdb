@@ -45,7 +45,7 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 
 ### กลุ่มที่ 1 — รายได้ (3 ข้อ)
 
-| # | คำถาม | ตารางต้นทางที่เกี่ยวข้อง | 
+| # | คำถาม | Measure  | 
 |---|---|---|
 | 01 | รายได้รวมจากการเช่าภาพยนตร์มีแนวโน้มเปลี่ยนแปลงไปอย่างไร | `Fact_Rental` (payment_amount) + `Dim_Date` | 
 | 02 | แต่ละสาขามีแนวโน้มรายได้แตกต่างกันอย่างไร | `Fact_Rental` (payment_amount) + `Dim_Store` + `Dim_Date` | 
@@ -53,7 +53,7 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 
 ### กลุ่มที่ 2 — ลูกค้า (3 ข้อ)
 
-| # | คำถาม | ตารางต้นทางที่เกี่ยวข้อง | 
+| # | คำถาม | Measure | 
 |---|---|---|
 | 04 | ลูกค้าในแต่ละภูมิภาคเช่าภาพยนตร์มากน้อยแค่ไหน | `Fact_Rental` + `Dim_Customer` (country) | 
 | 05 | ลูกค้า 5 อันดับแรกที่ใช้จ่ายและเช่าภาพยนตร์บ่อยที่สุดคือใคร | `Fact_Rental` + `Dim_Customer` | 
@@ -61,7 +61,7 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 
 ### กลุ่มที่ 3 — กลุ่มลูกค้า & การเช่าซ้ำ (4 ข้อ)
 
-| # | คำถาม | ตารางต้นทางที่เกี่ยวข้อง | 
+| # | คำถาม | Measure | 
 |---|---|---|
 | 07 | หากแบ่งลูกค้าออกเป็น 4 กลุ่มตามความถี่และยอดเงินที่จ่ายในการเช่า จะแบ่งได้อย่างไร | `Fact_Rental` + `Dim_Date` (RFM: recency/frequency/monetary) | 
 | 08 | ลูกค้าแต่ละกลุ่มนิยมเช่าภาพยนตร์หมวดหมู่ใดมากที่สุด | `Fact_Rental` + `Dim_Film` (category) + ผลลัพธ์กลุ่มจากข้อ 07 | 
@@ -70,7 +70,7 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 
 ### กลุ่มที่ 4 — เนื้อหาภาพยนตร์ (3 ข้อ)
 
-| # | คำถาม | ตารางต้นทางที่เกี่ยวข้อง | 
+| # | คำถาม | Measure | 
 |---|---|---|
 | 11 | ภาพยนตร์แต่ละหมวดหมู่ถูกเช่าไปกี่ครั้ง | `Fact_Rental` + `Dim_Film` (category) | 
 | 12 | ภาพยนตร์แต่ละเรตถูกเช่าไปกี่ครั้ง | `Fact_Rental` + `Dim_Film` (rating) | 
@@ -78,7 +78,7 @@ Database: <https://www.kaggle.com/datasets/atanaskanev/sqlite-sakila-sample-data
 
 ### กลุ่มที่ 5 — ร้าน/พนักงาน (3 ข้อ)
 
-| # | คำถาม | ตารางต้นทางที่เกี่ยวข้อง | 
+| # | คำถาม | Measure | 
 |---|---|---|
 | 14 | ในแต่ละวันมีลูกค้ามาคืนภาพยนตร์กี่ครั้ง | `Fact_Rental` + `Dim_Date` + `Dim_Customer` |
 | 15 | พนักงานแต่ละคนปล่อยเช่าภาพยนตร์ไปกี่ครั้ง | `Fact_Rental` + `Dim_Staff` | 
